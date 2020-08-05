@@ -21,7 +21,7 @@ class DashboardViewModel(
     private val _searchText = MutableLiveData<String>()
     val searchText: LiveData<String> get() = _searchText
 
-    private val _notes = MutableLiveData<List<Note>>()
+    private val _notes : LiveData<List<Note>> = repository.getNotes()
     val notes: LiveData<List<Note>> get() = _notes
 
     private val _loading = MutableLiveData<Boolean>()
@@ -34,13 +34,12 @@ class DashboardViewModel(
         fetchNotes()
     }
 
-    fun fetchNotes() {
+    private fun fetchNotes() {
+
         viewModelScope.launch {
+
             _loading.value = true
 
-            _notes.value = withContext(ioDispacher) {
-                repository.getNotes()
-            }
             _loading.value = false
         }
     }

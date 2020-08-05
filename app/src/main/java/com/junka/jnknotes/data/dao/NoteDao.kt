@@ -1,5 +1,6 @@
 package com.junka.jnknotes.data.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.junka.jnknotes.data.entities.Note
 
@@ -7,17 +8,17 @@ import com.junka.jnknotes.data.entities.Note
 interface NoteDao {
 
     @Query("SELECT * FROM notes ORDER BY id DESC")
-    suspend fun getAllNotes() : List<Note>
+    fun getAllNotes(): LiveData<List<Note>>
 
     @Query("SELECT * FROM notes WHERE id = :id")
-    suspend fun getNote(id : Long) : Note
+    suspend fun getNote(id: Long): Note
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(note : Note) : Long
+    suspend fun insert(note: Note): Long
 
     @Update
-    suspend fun update(note : Note) : Int
+    suspend fun update(note: Note): Int
 
     @Delete
-    suspend fun delete(note : Note)
+    suspend fun delete(note: Note)
 }

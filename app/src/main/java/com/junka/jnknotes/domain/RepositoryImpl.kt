@@ -1,11 +1,12 @@
 package com.junka.jnknotes.domain
 
+import androidx.lifecycle.LiveData
 import com.junka.jnknotes.data.NotesDataBase
 import com.junka.jnknotes.data.entities.Note
 
 class RepositoryImpl(private val database: NotesDataBase) : Repository {
 
-    override suspend fun getNotes(): List<Note> {
+    override fun getNotes(): LiveData<List<Note>> {
         return database.noteDao.getAllNotes()
     }
 
@@ -14,7 +15,7 @@ class RepositoryImpl(private val database: NotesDataBase) : Repository {
 
     }
 
-    override suspend fun updateNote(note : Note) : Int{
+    override suspend fun updateNote(note: Note): Int {
         return database.noteDao.update(note)
     }
 

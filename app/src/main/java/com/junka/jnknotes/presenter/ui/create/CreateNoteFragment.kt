@@ -6,14 +6,13 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.ui.onNavDestinationSelected
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.junka.jnknotes.R
@@ -41,38 +40,10 @@ class CreateNoteFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        setHasOptionsMenu(true)
         binding = FragmentCreateNoteBinding.inflate(layoutInflater).apply {
 
             textDate.text = Date().toString()
-
-            imageSave.setOnClickListener {
-
-                mNote?.let {
-                    it.title =  inputNoteTitle.editableText.toString()
-                    it.subtitle = inputNoteSubtitle.editableText.toString()
-                    it.body = inputNote.editableText.toString()
-                    it.color = viewModel.noteColor.value ?: R.color.colorDefaultNoteColor
-                    it.image = viewModel.noteImage.value ?: ""
-
-                } ?: run {
-
-                    mNote = Note(
-                        id = 0,
-                        title = inputNoteTitle.editableText.toString(),
-                        subtitle = inputNoteSubtitle.editableText.toString(),
-                        body = inputNote.editableText.toString(),
-                        color = viewModel.noteColor.value ?: R.color.colorDefaultNoteColor,
-                        image = viewModel.noteImage.value ?: ""
-                    )
-                }
-
-
-                mNote?.let {
-                    viewModel.saveNote(it)
-                }
-
-            }
 
             //Miscellaneous
             includeMiscellaneous.apply {
@@ -133,7 +104,7 @@ class CreateNoteFragment : Fragment() {
 
             observer(saveNote) {
                 it.getContentIfNotHandled()?.let { id ->
-                    findNavController().navigate(R.id.navigation_dashboard)
+                    findNavController().popBackStack()
                 }
             }
             observer(noteColor) {
@@ -149,16 +120,18 @@ class CreateNoteFragment : Fragment() {
                 mNote = it
 
                 setNoteColor(it.color)
+                setImagePath(it.image)
+
                 with(binding) {
                     inputNoteTitle.setText(it.title)
                     inputNoteSubtitle.setText(it.subtitle)
                     inputNote.setText(it.body)
                     textDate.text = it.date.toString()
 
-                    if(it.image.isNotEmpty()){
+                    if (it.image.isNotEmpty()) {
                         Glide.with(noteImage).load(it.image).into(noteImage)
                         noteImage.visibility = View.VISIBLE
-                    }else{
+                    } else {
                         noteImage.visibility = View.GONE
                     }
 
@@ -174,6 +147,8 @@ class CreateNoteFragment : Fragment() {
         startActivityForResult(intent, REQUEST_CODE_SELECT_IMAGE_STORAGE)
     }
 
+
+    //TODO cambiar a Android 11
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -195,6 +170,7 @@ class CreateNoteFragment : Fragment() {
     }
 
 
+    //TODO cambiar a Android 11
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -211,6 +187,7 @@ class CreateNoteFragment : Fragment() {
         }
     }
 
+    //TODO Sacar a un archivo aparte
     private fun getPathFromUri(uri: Uri): String? {
 
         var filepath = uri.path
@@ -224,4 +201,49 @@ class CreateNoteFragment : Fragment() {
         }
         return filepath
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_create_note, menu)
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.create_note -> {
+                onClickSave()
+            }
+        }
+        return item.onNavDestinationSelected(findNavController()) || super.onOptionsItemSelected(
+            item
+        )
+    }
+
+
+    private fun onClickSave() = with(binding) {
+
+        mNote?.let {
+            it.title = inputNoteTitle.editableText.toString()
+            it.subtitle = inputNoteSubtitle.editableText.toString()
+            it.body = inputNote.editableText.toString()
+            it.color = viewModel.noteColor.value ?: R.color.colorDefaultNoteColor
+            it.image = viewModel.noteImage.value ?: ""
+
+        } ?: run {
+
+            mNote = Note(
+                id = 0,
+                title = inputNoteTitle.editableText.toString(),
+                subtitle = inputNoteSubtitle.editableText.toString(),
+                body = inputNote.editableText.toString(),
+                color = viewModel.noteColor.value ?: R.color.colorDefaultNoteColor,
+                image = viewModel.noteImage.value ?: ""
+            )
+        }
+
+        mNote?.let {
+            viewModel.saveNote(it)
+        }
+    }
+
 }

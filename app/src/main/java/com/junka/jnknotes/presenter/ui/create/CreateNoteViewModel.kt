@@ -64,7 +64,6 @@ class CreateNoteViewModel(
 
         viewModelScope.launch {
             _note.value = withContext(ioDispatcher) { repository.getNote(id) }
-
         }
     }
 
