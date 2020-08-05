@@ -96,6 +96,21 @@
                 android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/inputNoteSubtitle"
                 />
+            
+            <ImageView
+                android:id="@+id/noteImageRemove"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/background_remove"
+                android:contentDescription="@string/app_name"
+                android:padding="4dp"
+                android:src="@drawable/ic_delete"
+                android:tint="@color/colorWhite"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@id/noteImage"
+                app:layout_constraintTop_toTopOf="@id/noteImage"/>
 
             <EditText
                 android:id="@+id/inputNote"

@@ -18,9 +18,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.junka.jnknotes.R
 import com.junka.jnknotes.data.entities.Note
 import com.junka.jnknotes.databinding.FragmentCreateNoteBinding
-import com.junka.jnknotes.presenter.ui.REQUEST_CODE_SELECT_IMAGE_STORAGE
-import com.junka.jnknotes.presenter.ui.REQUEST_CODE_STORAGE_PERMISSION
-import com.junka.jnknotes.presenter.ui.observer
+import com.junka.jnknotes.presenter.ui.*
 import org.koin.android.scope.lifecycleScope
 import org.koin.android.viewmodel.scope.viewModel
 import java.util.*
@@ -40,10 +38,16 @@ class CreateNoteFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         setHasOptionsMenu(true)
+
         binding = FragmentCreateNoteBinding.inflate(layoutInflater).apply {
 
             textDate.text = Date().toString()
+
+            noteImageRemove.setOnClickListener {
+                viewModel.setImagePath("")
+            }
 
             //Miscellaneous
             includeMiscellaneous.apply {
@@ -94,6 +98,7 @@ class CreateNoteFragment : Fragment() {
 
                 }
             }
+
         }
 
         with(viewModel) {
@@ -110,10 +115,24 @@ class CreateNoteFragment : Fragment() {
             observer(noteColor) {
                 binding.viewSubtitleIndicator.setBackgroundResource(it)
             }
-            observer(noteImage) {
+            observer(noteImage) { image ->
+
                 binding.noteImage.apply {
-                    Glide.with(this).load(it).into(this)
-                    visibility = View.VISIBLE
+
+                    if (image.isNotEmpty()) {
+                        Glide.with(this).load(image).into(this)
+                        show()
+                    } else {
+                        hide()
+                    }
+                }
+
+                binding.noteImageRemove.apply {
+                    if (image.isNotEmpty()) {
+                        show()
+                    } else {
+                        hide()
+                    }
                 }
             }
             observer(note) {
@@ -131,8 +150,10 @@ class CreateNoteFragment : Fragment() {
                     if (it.image.isNotEmpty()) {
                         Glide.with(noteImage).load(it.image).into(noteImage)
                         noteImage.visibility = View.VISIBLE
+                        noteImageRemove.visibility = View.VISIBLE
                     } else {
                         noteImage.visibility = View.GONE
+                        noteImageRemove.visibility = View.GONE
                     }
 
                 }

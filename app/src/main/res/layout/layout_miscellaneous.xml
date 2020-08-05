@@ -160,4 +160,6 @@
         android:text="@string/add_image"
         android:textColor="@color/colorIcons"
         android:textSize="16sp" />
+
+
 </LinearLayout>
