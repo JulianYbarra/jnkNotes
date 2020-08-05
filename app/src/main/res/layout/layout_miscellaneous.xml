@@ -150,6 +150,7 @@
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="12dp"
         android:drawableStart="@drawable/ic_image"
         android:drawablePadding="16dp"
@@ -160,6 +161,42 @@
         android:text="@string/add_image"
         android:textColor="@color/colorIcons"
         android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/layoutAddPassword"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
+        android:drawableStart="@drawable/ic_lock"
+        android:drawablePadding="16dp"
+        android:drawableTint="@color/colorIcons"
+        android:fontFamily="@font/rubik_medium"
+        android:gravity="center_vertical"
+        android:includeFontPadding="false"
+        android:text="@string/add_password"
+        android:textColor="@color/colorIcons"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/layoutDeleteNote"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
+        android:drawableStart="@drawable/ic_delete"
+        android:drawablePadding="16dp"
+        android:drawableTint="@color/colorDelete"
+        android:fontFamily="@font/rubik_medium"
+        android:gravity="center_vertical"
+        android:includeFontPadding="false"
+        android:text="@string/delete_note"
+        android:textColor="@color/colorDelete"
+        android:textSize="16sp"
+        android:visibility="gone"
+        />
 
 
 </LinearLayout>

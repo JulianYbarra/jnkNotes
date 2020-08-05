@@ -23,6 +23,10 @@ class RepositoryImpl(private val database: NotesDataBase) : Repository {
         return database.noteDao.getNote(id)
     }
 
+    override suspend fun deleteNote(note: Note) {
+        return database.noteDao.delete(note)
+    }
+
 
 }
 

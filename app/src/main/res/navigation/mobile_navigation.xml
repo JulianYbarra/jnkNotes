@@ -24,6 +24,14 @@
             android:name="id"
             app:argType="long"
             android:defaultValue="0L" />
+        <action
+            android:id="@+id/action_navigation_create_note_to_navigation_delete_note"
+            app:destination="@id/navigation_delete_note" />
     </fragment>
+
+    <dialog
+        android:id="@+id/navigation_delete_note"
+        android:name="com.junka.jnknotes.presenter.ui.DialogDeleteNote"
+        tools:layout="@layout/layout_delete_note"/>
 
 </navigation>

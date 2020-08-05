@@ -30,6 +30,18 @@ class CreateNoteViewModel(
     private val _noteImage = MutableLiveData<String>()
     val noteImage: LiveData<String> get() = _noteImage
 
+    private val _notePassword = MutableLiveData<String>()
+    val notePassword: LiveData<String> get() = _notePassword
+
+    fun getNote(id: Long) {
+
+        //si es 0, no busca
+        if (id == 0L) return
+
+        viewModelScope.launch {
+            _note.value = withContext(ioDispatcher) { repository.getNote(id) }
+        }
+    }
 
     fun saveNote(note: Note) {
         viewModelScope.launch {
@@ -49,6 +61,16 @@ class CreateNoteViewModel(
         }
     }
 
+    fun deleteNote(note: Note) {
+        viewModelScope.launch {
+            withContext(ioDispatcher) {
+                repository.deleteNote(note)
+            }
+
+            _saveNote.value = Event(0)
+        }
+    }
+
     fun setNoteColor(color: Int) {
         _noteColor.value = color
     }
@@ -57,14 +79,9 @@ class CreateNoteViewModel(
         _noteImage.value = path
     }
 
-    fun getNote(id: Long) {
-
-        //si es 0, no busca
-        if (id == 0L) return
-
-        viewModelScope.launch {
-            _note.value = withContext(ioDispatcher) { repository.getNote(id) }
-        }
+    fun setPassword(password: String) {
+        _notePassword.value = password
     }
+
 
 }

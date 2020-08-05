@@ -97,7 +97,27 @@ class CreateNoteFragment : Fragment() {
                     }
 
                 }
+
+                layoutAddPassword.setOnClickListener {
+                    //TODO ver proximos funcionamientos de Navigation Components
+                    //Crear dialog
+                }
+
+                layoutDeleteNote.setOnClickListener {
+
+                    //TODO ver proximos funcionamientos de Navigation Components
+
+//                    val action =
+//                        CreateNoteFragmentDirections.actionNavigationCreateNoteToNavigationDeleteNote()
+
+                   // findNavController().navigate(action)
+                    mNote?.let {
+                        viewModel.deleteNote(it)
+                    }
+                }
+
             }
+
 
         }
 
@@ -112,6 +132,7 @@ class CreateNoteFragment : Fragment() {
                     findNavController().popBackStack()
                 }
             }
+
             observer(noteColor) {
                 binding.viewSubtitleIndicator.setBackgroundResource(it)
             }
@@ -140,8 +161,14 @@ class CreateNoteFragment : Fragment() {
 
                 setNoteColor(it.color)
                 setImagePath(it.image)
+                setPassword(it.password)
 
                 with(binding) {
+
+                    includeMiscellaneous.apply {
+                        layoutDeleteNote.show()
+                    }
+
                     inputNoteTitle.setText(it.title)
                     inputNoteSubtitle.setText(it.subtitle)
                     inputNote.setText(it.body)
@@ -158,6 +185,7 @@ class CreateNoteFragment : Fragment() {
 
                 }
             }
+
         }
 
         return binding.root
